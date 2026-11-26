@@ -1,0 +1,11 @@
+{
+  "actions": [
+    {
+      "tool_name": "execute_shell_command",
+      "arguments": {
+        "command": "python3 ${args.skill_dir}/scripts/project_ops.py doctor --root ${args.root}",
+        "title": "Run project doctor"
+      }
+    }
+  ]
+}

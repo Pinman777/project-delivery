@@ -1,0 +1,11 @@
+{
+  "actions": [
+    {
+      "tool_name": "execute_shell_command",
+      "arguments": {
+        "command": "python3 ${args.skill_dir}/scripts/project_ops.py verify --root ${args.root} --stage ${args.stage}",
+        "title": "Run verification gate"
+      }
+    }
+  ]
+}

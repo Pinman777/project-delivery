@@ -1,0 +1,25 @@
+{
+  "actions": [
+    {
+      "tool_name": "execute_shell_command",
+      "arguments": {
+        "command": "python3 ${args.skill_dir}/scripts/project_ops.py init --root \"${args.root}\" --slug \"${args.slug}\" --mode \"${args.mode}\" --environment \"${args.environment}\" --goal \"${args.goal}\" --verify-cmd \"${args.verify_cmd}\" --obsidian-root \"${args.obsidian_root}\" --active-users \"${args.active_users}\" --data-class \"${args.data_class}\" --adopt", 
+        "title": "Initialize project scaffold"
+      }
+    },
+    {
+      "tool_name": "execute_shell_command",
+      "arguments": {
+        "command": "python3 ${args.skill_dir}/scripts/project_ops.py doctor --root ${args.root}",
+        "title": "Run baseline doctor check"
+      }
+    },
+    {
+      "tool_name": "execute_shell_command",
+      "arguments": {
+        "command": "python3 ${args.skill_dir}/scripts/project_ops.py backup --root ${args.root}",
+        "title": "Create initial backup with restore-check"
+      }
+    }
+  ]
+}

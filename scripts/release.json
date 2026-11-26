@@ -1,0 +1,18 @@
+{
+  "actions": [
+    {
+      "tool_name": "execute_shell_command",
+      "arguments": {
+        "command": "python3 ${args.skill_dir}/scripts/project_ops.py verify --root ${args.root} --stage ready-for-release",
+        "title": "Run ready-for-release verification"
+      }
+    },
+    {
+      "tool_name": "execute_shell_command",
+      "arguments": {
+        "command": "python3 ${args.skill_dir}/scripts/project_ops.py verify --root ${args.root} --stage released --deployed-commit $(git -C ${args.root} rev-parse HEAD)",
+        "title": "Run release gate with current HEAD"
+      }
+    }
+  ]
+}

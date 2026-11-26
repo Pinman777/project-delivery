@@ -108,18 +108,23 @@ The manifest records commit, timestamp, archive SHA256 and restored file hashes.
 
 A release is a transition backed by evidence, not a prose declaration.
 
-### 5. Doctor
+### 5. Autonomous watchdog
 
-`project_ops.py doctor` reports:
+For long-running autonomous tasks, use the watchdog to prevent silent stalls:
 
-- required documents and stage;
-- current HEAD, `last_good_commit`, `deployed_commit`;
-- backup restore status;
-- environment/root mismatch;
-- possible secrets, private keys and files larger than 10 MB;
-- deployed drift.
+```bash
+python3 <skill_dir>/scripts/project_ops.py watchdog \
+  --root /path/to/project --check-interval 30 --max-iterations 100
+```
 
-It writes `doctor.json` and never mutates project code. `STATUS.md` is generated separately from the authoritative `project.json`.
+The watchdog:
+
+- Monitors heartbeat every 30 seconds;
+- Auto-checkpoints on heartbeat timeout (>2 minutes);
+- Auto-continues when reaching 100 iterations (commits and resets counter);
+- Creates clean shutdown checkpoints on SIGTERM/SIGINT.
+
+Use it for any autonomous task that runs >50 iterations or has long waits between steps. This prevents the need to manually type "continue" after iteration limits or timeouts.
 
 ## GitHub and Obsidian model
 

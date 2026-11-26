@@ -18,6 +18,12 @@ import shutil
 import subprocess
 import sys
 
+# Import watchdog functionality
+try:
+    from .autonomous_watchdog import AutonomousWatchdog
+except ImportError:
+    AutonomousWatchdog = None
+
 DOC_FILES = [
     "PROJECT.md", "ARCHITECTURE.md", "DECISIONS.md", "DEVLOG.md",
     "RUNBOOK.md", "VERIFICATION.md", "ROLLBACK.md", "SECURITY.md",
@@ -409,6 +415,11 @@ def main() -> None:
     commit_parser = sub.add_parser("commit")
     commit_parser.add_argument("--root", required=True)
     commit_parser.add_argument("--message", default="chore: checkpoint")
+    watchdog_parser = sub.add_parser("watchdog")
+    watchdog_parser.add_argument("--root", required=True)
+    watchdog_parser.add_argument("--check-interval", type=int, default=30)
+    watchdog_parser.add_argument("--max-iterations", type=int, default=100)
+    watchdog_parser.add_argument("--heartbeat-file")
     args = parser.parse_args()
     root = Path(args.root)
     if args.command == "init":
@@ -421,6 +432,16 @@ def main() -> None:
         verify(root, args.stage, args.deployed_commit)
     elif args.command == "commit":
         commit(root, args.message)
+    elif args.command == "watchdog":
+        if AutonomousWatchdog is None:
+            raise RuntimeError("autonomous watchdog not available")
+        watchdog = AutonomousWatchdog(
+            root=root,
+            check_interval=args.check_interval,
+            max_iterations=args.max_iterations,
+            heartbeat_file=args.heartbeat_file,
+        )
+        watchdog.run()
 
 
 if __name__ == "__main__":
